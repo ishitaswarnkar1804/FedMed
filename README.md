@@ -6,7 +6,7 @@
 
 **Train medical AI collaboratively without sharing patient data.**
 
-<br/>
+<br>
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](#)
 [![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?style=for-the-badge\&logo=pytorch\&logoColor=white)](#)
@@ -19,25 +19,13 @@
 
 ---
 
-## ✨ What is FedMed?
+## 📖 Overview
 
-**FedMed** is a cross-silo **Federated Learning platform for healthcare institutions**.
+**FedMed** is a cross-silo Federated Learning platform designed for healthcare institutions.
 
 It enables multiple hospitals to collaboratively train a **3D brain-tumor segmentation model** while keeping sensitive MRI scans inside each hospital.
 
-Instead of transferring patient data to a centralized server, each hospital:
-
-```text
-Private MRI Data
-      ↓
-Local Training
-      ↓
-Protected Model Update
-      ↓
-Secure Aggregation
-      ↓
-Global Model
-```
+Instead of sending patient data to a centralized server, each hospital trains the model locally and sends only **protected model updates** for global aggregation.
 
 > 🔐 **Raw MRI scans never leave their respective hospital nodes.**
 
@@ -47,7 +35,7 @@ Global Model
 
 * [Overview](#-overview)
 * [Problem Statement](#-problem-statement)
-* [Key Idea](#-key-idea)
+* [How FedMed Works](#-how-fedmed-works)
 * [Medical AI Model](#-medical-ai-model)
 * [Privacy Architecture](#-privacy-architecture)
 * [System Architecture](#️-system-architecture)
@@ -63,126 +51,130 @@ Global Model
 * [Real-World Use Case](#-real-world-use-case)
 * [Project Goals](#-project-goals)
 * [Future Improvements](#-future-improvements)
-* [Why FedMed?](#-why-fedmed)
+* [Why FedMed](#-why-fedmed)
 * [Disclaimer](#️-disclaimer)
 * [Contributing](#-contributing)
 * [License](#-license)
 
 ---
 
-# 🚀 Overview
-
-Traditional medical AI often requires collecting large datasets in a centralized location:
-
-```text
-┌─────────────┐
-│  Hospital A │
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  Hospital B │ ──────► Central Dataset ──────► Train Model
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  Hospital C │
-└─────────────┘
-```
-
-This creates significant:
-
-* 🔒 Privacy challenges
-* ⚖️ Compliance challenges
-* 🛡️ Security concerns
-* 📋 Data-sharing restrictions
-* 🏥 Institutional ownership concerns
-
-### FedMed's approach
-
-```text
-                         ┌──────────────────────────┐
-                         │      🏥 FedMed Server    │
-                         │                          │
-                         │     Global 3D U-Net      │
-                         │     Secure Aggregation   │
-                         └────────────┬─────────────┘
-                                      │
-                              Global Model
-                                      │
-              ┌───────────────────────┼───────────────────────┐
-              │                       │                       │
-              ▼                       ▼                       ▼
-       ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
-       │ Hospital A  │         │ Hospital B  │         │ Hospital C  │
-       │             │         │             │         │             │
-       │ 🔒 Private  │         │ 🔒 Private  │         │ 🔒 Private  │
-       │    MRI      │         │    MRI      │         │    MRI      │
-       │      ↓      │         │      ↓      │         │      ↓      │
-       │ Local Train │         │ Local Train │         │ Local Train │
-       └──────┬──────┘         └──────┬──────┘         └──────┬──────┘
-              │                       │                       │
-              └───────────────────────┼───────────────────────┘
-                                      │
-                             Protected Updates
-                                      │
-                                      ▼
-                            🔐 Secure Aggregation
-                                      │
-                                      ▼
-                              Global Model v2
-```
-
----
-
 # 🎯 Problem Statement
 
-Training accurate machine-learning models for rare diseases requires **large and diverse datasets**.
+Training accurate machine-learning models for rare diseases requires large and diverse datasets.
 
-However, hospitals often cannot directly share patient-level medical data because of:
+However, hospitals often cannot share patient-level medical data because of:
 
-| Challenge                 | Description                                           |
-| ------------------------- | ----------------------------------------------------- |
-| 🔒 Patient Privacy        | Medical images contain sensitive information          |
-| ⚖️ Regulations            | Healthcare data is subject to strict regulations      |
-| 🏥 Institutional Policies | Hospitals may restrict data sharing                   |
-| 🛡️ Security              | Centralized datasets create attractive attack targets |
-| 📁 Data Ownership         | Institutions maintain control over their datasets     |
+* 🔒 Patient privacy requirements
+* ⚖️ Healthcare regulations
+* 🏥 Institutional data-sharing policies
+* 🛡️ Security concerns
+* 📁 Data ownership
 
-### 💡 FedMed's Solution
+FedMed addresses this problem by allowing hospitals to **train collaboratively without centralizing their private datasets**.
 
-FedMed allows hospitals to **train collaboratively without centralizing their private datasets**.
+### Traditional Medical AI
+
+```mermaid
+flowchart LR
+    A["🏥 Hospital A<br/>Private Patient Data"]
+    B["🏥 Hospital B<br/>Private Patient Data"]
+    C["🏥 Hospital C<br/>Private Patient Data"]
+
+    D["🗄️ Central Dataset"]
+    E["🧠 Train Medical AI"]
+
+    A --> D
+    B --> D
+    C --> D
+    D --> E
+
+    classDef hospital fill:#E8F1FF,stroke:#2563EB,stroke-width:2px,color:#111827
+    classDef central fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,color:#111827
+    classDef model fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class A,B,C hospital
+    class D central
+    class E model
+```
+
+### The Problem
+
+Centralizing medical data creates significant:
+
+**Privacy Risk → Compliance Risk → Security Risk**
 
 ---
 
-# 💡 Key Idea
+# 🚀 How FedMed Works
 
-FedMed follows a repeated federated training cycle:
+FedMed replaces centralized data collection with **Federated Learning**.
 
-```text
-       ┌──────────────────────────┐
-       │ 1. Create Global Model   │
-       └────────────┬─────────────┘
-                    ↓
-       ┌──────────────────────────┐
-       │ 2. Send Model to Clients │
-       └────────────┬─────────────┘
-                    ↓
-       ┌──────────────────────────┐
-       │ 3. Train Locally         │
-       └────────────┬─────────────┘
-                    ↓
-       ┌──────────────────────────┐
-       │ 4. Protect Updates       │
-       └────────────┬─────────────┘
-                    ↓
-       ┌──────────────────────────┐
-       │ 5. Aggregate Updates     │
-       └────────────┬─────────────┘
-                    ↓
-       ┌──────────────────────────┐
-       │ 6. Improve Global Model  │
-       └────────────┬─────────────┘
-                    ↓
-                  Repeat
+```mermaid
+flowchart TB
+
+    S["🌐 FedMed Server<br/><br/>Global 3D U-Net<br/>+<br/>Secure Aggregation"]
+
+    A["🏥 Hospital A<br/><br/>Private MRI Data"]
+    B["🏥 Hospital B<br/><br/>Private MRI Data"]
+    C["🏥 Hospital C<br/><br/>Private MRI Data"]
+
+    AT["🧠 Local Training"]
+    BT["🧠 Local Training"]
+    CT["🧠 Local Training"]
+
+    AU["🔐 Protected Update"]
+    BU["🔐 Protected Update"]
+    CU["🔐 Protected Update"]
+
+    A --> AT --> AU --> S
+    B --> BT --> BU --> S
+    C --> CT --> CU --> S
+
+    S --> M["🌍 Updated Global Model"]
+
+    M --> A
+    M --> B
+    M --> C
+
+    classDef server fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef train fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef privacy fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef model fill:#FCE7F3,stroke:#DB2777,stroke-width:2px,color:#111827
+
+    class S server
+    class A,B,C hospital
+    class AT,BT,CT train
+    class AU,BU,CU privacy
+    class M model
+```
+
+### 🔄 Training Cycle
+
+```mermaid
+flowchart TD
+    A["1️⃣ Create Global Model"]
+    B["2️⃣ Send Model to Hospitals"]
+    C["3️⃣ Hospitals Train Locally"]
+    D["4️⃣ Protect Model Updates"]
+    E["5️⃣ Secure Aggregation"]
+    F["6️⃣ Update Global Model"]
+    G{"7️⃣ Desired Performance?"}
+
+    A --> B --> C --> D --> E --> F --> G
+
+    G -- "No" --> B
+    G -- "Yes" --> H["✅ Training Complete"]
+
+    classDef process fill:#EFF6FF,stroke:#2563EB,stroke-width:2px,color:#111827
+    classDef security fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef decision fill:#F3E8FF,stroke:#9333EA,stroke-width:2px,color:#111827
+    classDef done fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class A,B,C,F process
+    class D,E security
+    class G decision
+    class H done
 ```
 
 > **The server receives model updates rather than patient MRI data.**
@@ -191,74 +183,66 @@ FedMed follows a repeated federated training cycle:
 
 # 🧠 Medical AI Model
 
-FedMed uses a **3D U-Net architecture** for volumetric medical-image segmentation.
+FedMed uses a **3D U-Net** architecture for volumetric medical-image segmentation.
 
-### Input
+### Input → Model → Output
 
-```text
-                 🧠 MRI Scan
-                     │
-                     ▼
-          ┌─────────────────────┐
-          │    3D MRI Volume    │
-          │                     │
-          │       Brain         │
-          │         ↓           │
-          │       Tumor         │
-          └─────────────────────┘
-```
+```mermaid
+flowchart LR
+    A["🧠 3D MRI Volume<br/><br/>Brain + Tumor"]
+    B["⚙️ 3D U-Net"]
+    C["🎯 Tumor Segmentation Mask"]
 
-### Output
+    A --> B --> C
 
-```text
-3D MRI Volume
-      │
-      ▼
-  ┌─────────┐
-  │ 3D U-Net│
-  └────┬────┘
-       │
-       ▼
-Tumor Segmentation Mask
+    classDef input fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef model fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef output fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class A input
+    class B model
+    class C output
 ```
 
 ### 📊 Evaluation Metrics
 
-FedMed can evaluate segmentation performance using:
-
-* **Dice Score**
-* **IoU — Intersection over Union**
-* **Validation Loss**
-* **Precision**
-* **Recall**
+| Metric              | Purpose                         |
+| ------------------- | ------------------------------- |
+| **Dice Score**      | Measures segmentation overlap   |
+| **IoU**             | Intersection over Union         |
+| **Validation Loss** | Measures model error            |
+| **Precision**       | Measures prediction correctness |
+| **Recall**          | Measures detection coverage     |
 
 ---
 
 # 🔐 Privacy Architecture
 
-FedMed combines multiple privacy mechanisms.
+FedMed uses multiple privacy mechanisms.
 
 ## 1. Federated Learning
 
-Patient data remains inside the hospital.
+```mermaid
+flowchart LR
+    A["🏥 Hospital Dataset"]
+    B["🧠 Local Training"]
+    C["📦 Model Update"]
+    D["🌐 Federation Server"]
 
-```text
-┌─────────────────────┐
-│   Hospital Dataset  │
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│   Local Training    │
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│   Model Update      │
-└──────────┬──────────┘
-           ↓
-      FedMed Server
+    A --> B --> C --> D
+
+    classDef local fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef train fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef update fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef server fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+
+    class A local
+    class B train
+    class C update
+    class D server
 ```
 
-Only the resulting model update is sent to the federation server.
+**Patient data stays inside the hospital.**
 
 ---
 
@@ -266,23 +250,28 @@ Only the resulting model update is sent to the federation server.
 
 FedMed uses **TenSEAL** to protect model updates.
 
-The goal is to allow aggregation of protected values without requiring the server to access the underlying plaintext updates.
+```mermaid
+flowchart LR
+    A["🧠 Local Weights"]
+    B["🔐 Encryption"]
+    C["🔒 Encrypted Update"]
+    D["🌐 FedMed Server"]
+    E["🛡️ Secure Aggregation"]
 
-```text
-Local Weights
-     │
-     ▼
- Encryption
-     │
-     ▼
-Encrypted Update
-     │
-     ▼
-FedMed Server
-     │
-     ▼
-Secure Aggregation
+    A --> B --> C --> D --> E
+
+    classDef weights fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef encryption fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef server fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef aggregation fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class A weights
+    class B,C encryption
+    class D server
+    class E aggregation
 ```
+
+The goal is to allow aggregation of protected values without requiring the server to access the underlying plaintext updates.
 
 ---
 
@@ -290,90 +279,137 @@ Secure Aggregation
 
 The aggregation layer is designed to prevent the server from directly inspecting an individual hospital's contribution.
 
+```mermaid
+flowchart TB
+    A["🔒 Hospital A Update"]
+    B["🔒 Hospital B Update"]
+    C["🔒 Hospital C Update"]
+
+    D["🛡️ Secure Aggregation"]
+
+    E["🌍 Aggregated Global Update"]
+
+    A --> D
+    B --> D
+    C --> D
+
+    D --> E
+
+    classDef update fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef secure fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef output fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class A,B,C update
+    class D secure
+    class E output
+```
+
 > ⚠️ **Important:** FedMed is designed to improve privacy; it should not be interpreted as providing absolute or mathematically complete privacy under every possible threat model.
 
 ---
 
 # 🏗️ System Architecture
 
-```text
-                         ┌────────────────────────┐
-                         │    React Dashboard     │
-                         │      + Recharts        │
-                         └───────────┬────────────┘
-                                     │
-                                     ▼
-                         ┌────────────────────────┐
-                         │     FedMed Server      │
-                         │                        │
-                         │       Flower          │
-                         │  Global Model Manager  │
-                         │  Secure Aggregation    │
-                         └───────────┬────────────┘
-                                     │
-                   ┌─────────────────┼─────────────────┐
-                   │                 │                 │
-                   ▼                 ▼                 ▼
-             Hospital A        Hospital B        Hospital C
-             ──────────        ──────────        ──────────
-             Private MRI      Private MRI      Private MRI
-                   │                 │                 │
-                   ▼                 ▼                 ▼
-              Preprocess        Preprocess        Preprocess
-                   │                 │                 │
-                   ▼                 ▼                 ▼
-                3D U-Net          3D U-Net          3D U-Net
-                   │                 │                 │
-                   ▼                 ▼                 ▼
-               Local Train       Local Train       Local Train
-                   │                 │                 │
-                   ▼                 ▼                 ▼
-                Encrypt           Encrypt           Encrypt
-                   │                 │                 │
-                   └─────────────────┼─────────────────┘
-                                     │
-                                     ▼
-                            Secure Aggregation
-                                     │
-                                     ▼
-                           Updated Global Model
+```mermaid
+flowchart TB
+
+    UI["💻 React Dashboard<br/>+ Recharts"]
+
+    SERVER["🌐 FedMed Server<br/><br/>Flower<br/>Global Model Manager<br/>Secure Aggregation"]
+
+    A["🏥 Hospital A<br/>Private MRI"]
+    B["🏥 Hospital B<br/>Private MRI"]
+    C["🏥 Hospital C<br/>Private MRI"]
+
+    AP["Preprocessing"]
+    BP["Preprocessing"]
+    CP["Preprocessing"]
+
+    AM["3D U-Net"]
+    BM["3D U-Net"]
+    CM["3D U-Net"]
+
+    AT["Local Training"]
+    BT["Local Training"]
+    CT["Local Training"]
+
+    AE["🔐 Encrypt"]
+    BE["🔐 Encrypt"]
+    CE["🔐 Encrypt"]
+
+    AGG["🛡️ Secure Aggregation"]
+
+    GLOBAL["🌍 Updated Global Model"]
+
+    UI --> SERVER
+
+    SERVER --> A
+    SERVER --> B
+    SERVER --> C
+
+    A --> AP --> AM --> AT --> AE
+    B --> BP --> BM --> BT --> BE
+    C --> CP --> CM --> CT --> CE
+
+    AE --> AGG
+    BE --> AGG
+    CE --> AGG
+
+    AGG --> GLOBAL
+    GLOBAL --> SERVER
+
+    classDef dashboard fill:#DBEAFE,stroke:#2563EB,stroke-width:3px,color:#111827
+    classDef server fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef process fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef security fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef aggregation fill:#FCE7F3,stroke:#DB2777,stroke-width:3px,color:#111827
+    classDef global fill:#D1FAE5,stroke:#059669,stroke-width:3px,color:#111827
+
+    class UI dashboard
+    class SERVER server
+    class A,B,C hospital
+    class AP,BP,CP,AM,BM,CM,AT,BT,CT process
+    class AE,BE,CE security
+    class AGG aggregation
+    class GLOBAL global
 ```
 
 ---
 
 # 🛠️ Tech Stack
 
-## 🧠 Machine Learning
+## Machine Learning
 
-| Technology   | Purpose                 |
-| ------------ | ----------------------- |
-| **Python**   | Core development        |
-| **PyTorch**  | Deep learning           |
-| **MONAI**    | Medical AI framework    |
-| **3D U-Net** | Volumetric segmentation |
+| Technology      | Role               |
+| --------------- | ------------------ |
+| 🐍 **Python**   | Core development   |
+| 🔥 **PyTorch**  | Deep learning      |
+| 🏥 **MONAI**    | Medical AI         |
+| 🧠 **3D U-Net** | Image segmentation |
 
-## 🌐 Federated Learning
+## Federated Learning
 
-| Technology | Purpose                          |
-| ---------- | -------------------------------- |
-| **Flower** | Federated learning orchestration |
+| Technology    | Role                             |
+| ------------- | -------------------------------- |
+| 🌸 **Flower** | Federated learning orchestration |
 
-## 🔐 Privacy & Security
+## Privacy & Security
 
-| Technology                 | Purpose                               |
-| -------------------------- | ------------------------------------- |
-| **TenSEAL**                | Homomorphic encryption                |
-| **Homomorphic Encryption** | Protected computation                 |
-| **Secure Aggregation**     | Privacy-preserving update aggregation |
+| Technology                    | Role                           |
+| ----------------------------- | ------------------------------ |
+| 🔐 **TenSEAL**                | Homomorphic encryption         |
+| 🔒 **Homomorphic Encryption** | Protected computation          |
+| 🛡️ **Secure Aggregation**    | Privacy-preserving aggregation |
 
-## 💻 Frontend
+## Frontend
 
-| Technology   | Purpose                 |
-| ------------ | ----------------------- |
-| **React**    | Dashboard UI            |
-| **Recharts** | Training visualizations |
+| Technology      | Role               |
+| --------------- | ------------------ |
+| ⚛️ **React**    | Dashboard          |
+| 📊 **Recharts** | Data visualization |
 
-## 🗃️ Data
+## Data
 
 * MRI / CT volumetric medical images
 * NIfTI-compatible preprocessing
@@ -462,7 +498,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-## 3. Install Python dependencies
+## 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -494,32 +530,49 @@ npm install
 
 # 📊 Dataset
 
-FedMed is designed for **volumetric medical-imaging datasets**.
+FedMed is designed for volumetric medical-imaging datasets.
 
 A suitable dataset should contain:
 
-```text
-MRI Volume
-     +
-Ground Truth
-Segmentation Mask
+```mermaid
+flowchart LR
+    A["🧠 MRI Volume"]
+    B["🎯 Ground Truth<br/>Segmentation Mask"]
+
+    A --> C["📊 Training Dataset"]
+    B --> C
+
+    classDef data fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef dataset fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class A,B data
+    class C dataset
 ```
 
 For development, the dataset can be divided into three simulated hospital datasets:
 
-```text
-                 Dataset
-                    │
-        ┌───────────┼───────────┐
-        ▼           ▼           ▼
-   Hospital A  Hospital B  Hospital C
+```mermaid
+flowchart TB
+    D["📊 Development Dataset"]
+
+    D --> A["🏥 Hospital A"]
+    D --> B["🏥 Hospital B"]
+    D --> C["🏥 Hospital C"]
+
+    A --> A1["Private Local Partition"]
+    B --> B1["Private Local Partition"]
+    C --> C1["Private Local Partition"]
+
+    classDef dataset fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef local fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class D dataset
+    class A,B,C hospital
+    class A1,B1,C1 local
 ```
 
-Each hospital should maintain its own local copy or partition.
-
-## ⚠️ Privacy Notice
-
-> **Never upload real patient-identifiable medical data to this repository.**
+> ⚠️ **Never upload real patient-identifiable medical data to this repository.**
 
 For demonstrations and development, use:
 
@@ -531,62 +584,81 @@ For demonstrations and development, use:
 
 # ▶️ Running FedMed
 
-## Start the federated server
+### Start the federated server
 
 ```bash
 python server/server.py
 ```
 
-## Start Hospital A
+### Start Hospital A
 
 ```bash
 python clients/hospital_a/client.py
 ```
 
-## Start Hospital B
+### Start Hospital B
 
 ```bash
 python clients/hospital_b/client.py
 ```
 
-## Start Hospital C
+### Start Hospital C
 
 ```bash
 python clients/hospital_c/client.py
 ```
 
-The clients connect to the federated server and participate in the training rounds.
-
 ---
 
 # 🔄 Federated Training
 
-A typical training round looks like:
+A complete training round:
 
-```text
-                     GLOBAL MODEL
-                          │
-          ┌───────────────┼───────────────┐
-          ▼               ▼               ▼
-     Hospital A      Hospital B      Hospital C
-          │               │               │
-     Local Epochs    Local Epochs    Local Epochs
-          │               │               │
-          ▼               ▼               ▼
-     Model Update    Model Update    Model Update
-          │               │               │
-          └───────────────┼───────────────┘
-                          ▼
-                  🔒 Encryption Layer
-                          │
-                          ▼
-                  Secure Aggregation
-                          │
-                          ▼
-                    GLOBAL MODEL
-                          │
-                          ▼
-                       Round 2
+```mermaid
+flowchart TB
+
+    G["🌍 GLOBAL MODEL"]
+
+    G --> A["🏥 Hospital A"]
+    G --> B["🏥 Hospital B"]
+    G --> C["🏥 Hospital C"]
+
+    A --> AT["Local Epochs"]
+    B --> BT["Local Epochs"]
+    C --> CT["Local Epochs"]
+
+    AT --> AU["Model Update"]
+    BT --> BU["Model Update"]
+    CT --> CU["Model Update"]
+
+    AU --> E["🔐 Encryption Layer"]
+    BU --> E
+    CU --> E
+
+    E --> S["🛡️ Secure Aggregation"]
+
+    S --> N["🌍 UPDATED GLOBAL MODEL"]
+
+    N --> R{"Continue Training?"}
+
+    R -- "Yes" --> G
+    R -- "No" --> F["✅ Final Model"]
+
+    classDef global fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef train fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef update fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef secure fill:#FCE7F3,stroke:#DB2777,stroke-width:3px,color:#111827
+    classDef decision fill:#F3E8FF,stroke:#9333EA,stroke-width:2px,color:#111827
+    classDef final fill:#D1FAE5,stroke:#059669,stroke-width:3px,color:#111827
+
+    class G,N global
+    class A,B,C hospital
+    class AT,BT,CT train
+    class AU,BU,CU update
+    class E,S secure
+    class R decision
+    class F final
 ```
 
 This process continues until the global model reaches the desired performance.
@@ -609,27 +681,29 @@ The React dashboard provides real-time visibility into federated training.
 | **Training Time**        | Time taken per round                 |
 | **Client Participation** | Hospitals participating in the round |
 
-### Example
+### Dashboard Flow
 
-```text
-┌───────────────────────────────────────────────┐
-│                 FedMed Dashboard              │
-├───────────────────────────────────────────────┤
-│                                               │
-│  Round: 15          Dice Score: 0.87          │
-│                                               │
-│  Global Loss                                  │
-│  1.0 ┤╲                                       │
-│      │ ╲                                      │
-│  0.5 │  ╲________                             │
-│      │           ╲____                        │
-│  0.0 └──────────────────────                  │
-│                                               │
-│  Hospital A     ● Training                    │
-│  Hospital B     ● Training                    │
-│  Hospital C     ● Training                    │
-│                                               │
-└───────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    A["🌐 Federated Server"]
+    B["📡 Training Metrics"]
+    C["💻 React Dashboard"]
+    D["📊 Recharts"]
+    E["👨‍💻 Developer / Researcher"]
+
+    A --> B --> C --> D --> E
+
+    classDef server fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef metrics fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#111827
+    classDef dashboard fill:#DBEAFE,stroke:#2563EB,stroke-width:3px,color:#111827
+    classDef chart fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef user fill:#F3F4F6,stroke:#6B7280,stroke-width:2px,color:#111827
+
+    class A server
+    class B metrics
+    class C dashboard
+    class D chart
+    class E user
 ```
 
 ---
@@ -638,18 +712,26 @@ The React dashboard provides real-time visibility into federated training.
 
 For a hackathon or local demonstration, three hospitals can be simulated as three isolated clients.
 
-```text
-                     Local Machine
-                          │
-              ┌───────────┼───────────┐
-              │           │           │
-              ▼           ▼           ▼
-          Client A    Client B    Client C
-           MRI-A       MRI-B       MRI-C
-              │           │           │
-              └───────────┼───────────┘
-                          ▼
-                    FedMed Server
+```mermaid
+flowchart TB
+
+    M["💻 Local Machine"]
+
+    M --> A["🏥 Client A<br/>MRI-A"]
+    M --> B["🏥 Client B<br/>MRI-B"]
+    M --> C["🏥 Client C<br/>MRI-C"]
+
+    A --> S["🌐 FedMed Server"]
+    B --> S
+    C --> S
+
+    classDef machine fill:#F3F4F6,stroke:#6B7280,stroke-width:2px,color:#111827
+    classDef client fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef server fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+
+    class M machine
+    class A,B,C client
+    class S server
 ```
 
 Each client can have:
@@ -665,23 +747,39 @@ This makes the demonstration more realistic than simply splitting identical batc
 
 # 🔒 Security Model
 
-FedMed aims to protect against unauthorized access to patient data during collaborative training.
+## Data That Stays Local
 
-## 🔐 Data That Stays Local
+```mermaid
+flowchart TB
+    A["🏥 Hospital"]
 
-```text
-❌ Patient MRI scans
-❌ Patient identifiers
-❌ Local medical records
-❌ Raw segmentation datasets
+    A --> B["❌ Patient MRI Scans"]
+    A --> C["❌ Patient Identifiers"]
+    A --> D["❌ Local Medical Records"]
+    A --> E["❌ Raw Segmentation Dataset"]
+
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:3px,color:#111827
+    classDef private fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,color:#111827
+
+    class A hospital
+    class B,C,D,E private
 ```
 
-## 📡 Data Exchanged
+## Data Exchanged
 
-```text
-✅ Model parameters / updates
-✅ Training metadata
-✅ Aggregated metrics
+```mermaid
+flowchart TB
+    H["🏥 Hospital"]
+
+    H --> A["✅ Model Parameters / Updates"]
+    H --> B["✅ Training Metadata"]
+    H --> C["✅ Aggregated Metrics"]
+
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:3px,color:#111827
+    classDef exchange fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+
+    class H hospital
+    class A,B,C exchange
 ```
 
 Model updates should be protected before transmission using the configured privacy layer.
@@ -690,19 +788,30 @@ Model updates should be protected before transmission using the configured priva
 
 # 🌍 Real-World Use Case
 
-Imagine three hospitals located in different countries:
+Imagine three hospitals located in different countries.
 
-```text
-              🇮🇳 Hospital A
-                    │
-                    │
-                    ├──────────► 🏥 FedMed ◄──────────┐
-                    │                                  │
-              🇬🇧 Hospital B                          │
-                    │                                  │
-                    └──────────────────────────────────┤
-                                                       │
-              🇺🇸 Hospital C ─────────────────────────┘
+```mermaid
+flowchart LR
+
+    A["🇮🇳 Hospital A"]
+    B["🇬🇧 Hospital B"]
+    C["🇺🇸 Hospital C"]
+
+    F["🏥 FedMed<br/>Federated AI Platform"]
+
+    A --> F
+    B --> F
+    C --> F
+
+    F --> G["🌍 Shared Global Model"]
+
+    classDef hospital fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef platform fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef model fill:#DCFCE7,stroke:#16A34A,stroke-width:3px,color:#111827
+
+    class A,B,C hospital
+    class F platform
+    class G model
 ```
 
 Each institution contributes to a shared AI model while maintaining control over its own patient dataset.
@@ -720,7 +829,7 @@ Each institution contributes to a shared AI model while maintaining control over
 
 # 🎯 Project Goals
 
-### Core Features
+### ✅ Completed
 
 * [x] Federated Learning architecture
 * [x] Distributed hospital clients
@@ -730,7 +839,7 @@ Each institution contributes to a shared AI model while maintaining control over
 * [x] Secure aggregation architecture
 * [x] Training monitoring dashboard
 
-### Future Features
+### 🚧 Planned
 
 * [ ] Multi-GPU distributed training
 * [ ] Differential Privacy
@@ -742,38 +851,32 @@ Each institution contributes to a shared AI model while maintaining control over
 
 # 🚧 Future Improvements
 
-## 🔐 Differential Privacy
+### 🔐 Differential Privacy
 
-Add noise to updates to provide stronger protection against:
+Add noise to updates to provide stronger protection against model-inversion and membership-inference attacks.
 
-* Model-inversion attacks
-* Membership-inference attacks
+### 🪪 Client Authentication
 
-## 🪪 Client Authentication
+Introduce secure hospital identity management using certificates or public-key infrastructure.
 
-Introduce secure hospital identity management using:
-
-* Digital certificates
-* Public-key infrastructure
-
-## 🔄 Fault Tolerance
+### 🔄 Fault Tolerance
 
 Allow training to continue when one or more hospital nodes temporarily disconnect.
 
-## 📦 Non-IID Data Handling
+### 📦 Non-IID Data Handling
 
 Medical datasets can differ significantly between hospitals.
 
-Potential approaches include:
+Future versions can implement:
 
-* **FedProx**
-* **Personalized Federated Learning**
-* **Adaptive Aggregation**
-* **Client Weighting**
+* FedProx
+* Personalized Federated Learning
+* Adaptive aggregation
+* Client weighting
 
-## 🛡️ Advanced Privacy
+### 🛡️ Advanced Privacy
 
-Potential future additions:
+Potential future additions include:
 
 * Differential Privacy
 * Secure Multi-Party Computation
@@ -784,33 +887,54 @@ Potential future additions:
 
 # 🏆 Why FedMed?
 
-### Traditional Centralized ML
+## Traditional Centralized ML
 
-```text
-More Data
-    ↓
-Centralized Dataset
-    ↓
-Better Model
-    ↓
-Higher Privacy Risk
+```mermaid
+flowchart TD
+    A["📊 More Data"]
+    B["🗄️ Centralized Dataset"]
+    C["🧠 Better Model"]
+    D["⚠️ Higher Privacy Risk"]
+
+    A --> B --> C --> D
+
+    classDef data fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef central fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,color:#111827
+    classDef model fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef risk fill:#FECACA,stroke:#B91C1C,stroke-width:3px,color:#111827
+
+    class A data
+    class B central
+    class C model
+    class D risk
 ```
 
-### FedMed
+## FedMed
 
-```text
-More Hospitals
-      ↓
-More Diverse Local Data
-      ↓
-Federated Training
-      ↓
-Better Global Model
-      ↓
-Patient Data Remains Local
+```mermaid
+flowchart TD
+    A["🏥 More Hospitals"]
+    B["🌍 More Diverse Local Data"]
+    C["🔄 Federated Training"]
+    D["🧠 Better Global Model"]
+    E["🔐 Patient Data Remains Local"]
+
+    A --> B --> C --> D --> E
+
+    classDef hospitals fill:#E0F2FE,stroke:#0284C7,stroke-width:2px,color:#111827
+    classDef data fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#111827
+    classDef federated fill:#EDE9FE,stroke:#7C3AED,stroke-width:3px,color:#111827
+    classDef model fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#111827
+    classDef privacy fill:#FEF3C7,stroke:#D97706,stroke-width:3px,color:#111827
+
+    class A hospitals
+    class B data
+    class C federated
+    class D model
+    class E privacy
 ```
 
-> **FedMed demonstrates how privacy-preserving machine learning can make cross-institution medical AI collaboration possible.**
+> 💡 **FedMed demonstrates how privacy-preserving machine learning can make cross-institution medical AI collaboration possible.**
 
 ---
 
@@ -820,7 +944,7 @@ FedMed is an **educational/research prototype** and is **not intended for clinic
 
 The privacy and security guarantees of a real-world deployment depend on the complete system architecture, threat model, encryption configuration, authentication, infrastructure, and regulatory requirements.
 
-> **Do not use real patient-identifiable data in development or demonstration environments without appropriate authorization and safeguards.**
+> 🚨 **Do not use real patient-identifiable data in development or demonstration environments without appropriate authorization and safeguards.**
 
 ---
 
@@ -828,33 +952,31 @@ The privacy and security guarantees of a real-world deployment depend on the com
 
 Contributions are welcome!
 
-### 1. Create a feature branch
+### Create a feature branch
 
 ```bash
 git checkout -b feature/your-feature
 ```
 
-### 2. Stage your changes
+### Stage changes
 
 ```bash
 git add .
 ```
 
-### 3. Commit
+### Commit
 
 ```bash
 git commit -m "Add your feature"
 ```
 
-### 4. Push
+### Push
 
 ```bash
 git push origin feature/your-feature
 ```
 
-### 5. Open a Pull Request
-
-After pushing your branch, open a **Pull Request** on GitHub for review.
+Then open a **Pull Request** on GitHub.
 
 ---
 
@@ -874,7 +996,13 @@ MIT License
 
 <p align="center">
 
-**Python** • **PyTorch** • **MONAI** • **Flower** • **TenSEAL** • **React** • **Recharts**
+🐍 **Python**
+🔥 **PyTorch**
+🏥 **MONAI**
+🌸 **Flower**
+🔐 **TenSEAL**
+⚛️ **React**
+📊 **Recharts**
 
 </p>
 
@@ -882,8 +1010,8 @@ MIT License
 
 <p align="center">
 
-## 🏥 FedMed
+# 🏥 FedMed
 
-### *Collaborative Intelligence. Private Data. Better Healthcare.*
+### **Collaborative Intelligence. Private Data. Better Healthcare.**
 
 </p>
