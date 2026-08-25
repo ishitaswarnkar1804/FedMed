@@ -301,6 +301,145 @@ approach the centralized baseline we just established?"
 
 ---
 
+# Week 1 — Centralized Baseline & Node Scaffolding
+### FedMed: Cross-Silo Federated Learning Engine
+
+---
+
+## 1. Week 1 Objective
+
+Before any federation, privacy, or encryption work begins, Week 1 exists to answer two foundational questions:
+
+1. **"Can our model even solve this problem?"** — Train a standard (non-federated) 3D U-Net on a public MRI dataset (BraTS) to get a real accuracy number. This becomes the **benchmark** every later, privacy-preserving version of the model must be compared against.
+2. **"Can our distributed skeleton stand up?"** — Before wiring real encrypted communication, get the shape of the system in place: one central server process and three independent "hospital" processes that can be started, addressed, and identified separately.
+
+Everything built this week is deliberately simple. No encryption, no real federation logic, no security — those are Week 2 and Week 3. Week 1 is about **proving the two halves of the system independently** before joining them.
+
+---
+
+## 2. Two Parallel Tracks
+
+| Track | Owner Concern | What "Done" Looks Like by End of Week 1 |
+|---|---|---|
+| **PPML Engineering** | Is the model architecture and training pipeline correct? | A centralized 3D U-Net trained on pooled BraTS data, with a recorded baseline accuracy/Dice score |
+| **Distributed Systems** | Can the federated topology exist at all? | 3 mock "hospital node" processes running independently on separate ports, aware of a central coordinator address |
+
+These two tracks don't talk to each other yet. They merge in **Week 2**, when the *same* model architecture proven in Track 1 gets deployed inside the node processes scaffolded in Track 2, and starts actually training on data instead of just booting up.
+
+---
+
+## 3. Why This Order Matters
+
+A federated learning system has two independent sources of failure:
+- The **model** might not be able to learn the task at all (bad architecture, bad preprocessing, bad hyperparameters).
+- The **distributed infrastructure** might not be able to coordinate reliably (nodes can't connect, ports conflict, one node hangs the whole round).
+
+If both are built and tested *together* from day one, a failure could come from either side and debugging becomes guesswork. By isolating them in Week 1 — prove the model works centrally, prove the nodes can boot and be addressed separately — Week 2's federated integration only has to test **one new thing**: the communication and aggregation logic itself.
+
+---
+
+## 4. Conceptual Flow — Centralized Baseline
+
+```mermaid
+flowchart LR
+    A[(Pooled BraTS Dataset\nall patient scans, one place)] --> B[3D U-Net Architecture]
+    B --> C[Standard Training Loop]
+    C --> D[Loss / Dice Score Tracking]
+    D --> E[Best Checkpoint Saved]
+    E --> F["Baseline Accuracy\n(the number Week 2's federated\nmodel must approach)"]
+```
+
+**Why this step is allowed to pool data:** this is the *only* point in the entire project where data is centralized — deliberately, and only for benchmarking purposes on a public dataset. From Week 2 onward, this pattern is never repeated with real patient data; every subsequent training step happens locally inside a hospital's own environment.
+
+---
+
+## 5. Conceptual Flow — Node Scaffolding
+
+```mermaid
+flowchart TB
+    S["Central Server Process\n(coordinator, listens on one port)"]
+
+    subgraph H1["Hospital Node 1\n(own process, own port)"]
+        N1["Identifies itself to the server\nNo real training yet"]
+    end
+    subgraph H2["Hospital Node 2\n(own process, own port)"]
+        N2["Identifies itself to the server\nNo real training yet"]
+    end
+    subgraph H3["Hospital Node 3\n(own process, own port)"]
+        N3["Identifies itself to the server\nNo real training yet"]
+    end
+
+    S -. "can address / discover" .- N1
+    S -. "can address / discover" .- N2
+    S -. "can address / discover" .- N3
+```
+
+At this stage, each "hospital" is really just a separate, isolated process — simulating three different physical hospitals on three different local ports. The point of Week 1 is only to prove these three processes can run **simultaneously and independently** and be individually addressable by a coordinator. Real local training, encrypted communication, and secure channels are intentionally absent — they're the entire subject of Weeks 2 and 3.
+
+---
+
+## 6. Week 1 Deliverables (Descriptive)
+
+| Deliverable | Description |
+|---|---|
+| **Baseline Model Definition** | A written specification of the 3D U-Net architecture: input = 4-channel MRI volume (T1, T1ce, T2, FLAIR), output = 4-class voxel segmentation (background, necrotic core, edema, enhancing tumor), following BraTS labeling convention |
+| **Baseline Training Report** | A record of the centralized training run — dataset size used, number of epochs, final loss curve behavior, and best validation Dice score achieved. This becomes the reference number for the Mid-Project Review's federated audit |
+| **Node Topology Design** | A description of how three hospital nodes and one central coordinator are logically separated — each node representing an isolated environment with its own (simulated) private data, reachable only via its assigned port |
+| **Project Repository Structure** | The folder layout that organizes model logic, node logic, server logic, data handling, and documentation into clearly separated concerns, so Week 2's federation work has a clean place to land |
+
+---
+
+## 7. Suggested Repository Structure (Descriptive)
+
+```
+fedmed/
+├── README.md                # Full project overview, architecture, week-wise plan
+├── requirements.txt         # Dependency manifest
+├── .gitignore                # Excludes patient data, checkpoints, secrets
+├── model/                    # Everything related to the shared ML architecture
+│   ├── (dataset handling description)
+│   ├── (3D U-Net architecture description)
+│   └── (centralized training loop description)
+├── node/                     # Everything related to a single hospital's process
+│   └── (hospital node scaffold description)
+├── server/                    # Everything related to the central coordinator
+│   └── (server scaffold description)
+├── data/                      # Local-only, gitignored — never committed
+└── docs/
+    └── week1_summary.md       # This document
+```
+
+---
+
+## 8. Week 1 → Week 2 Handoff
+
+| What Week 1 Proves | What Week 2 Builds On Top of It |
+|---|---|
+| The 3D U-Net architecture can learn tumor segmentation at all | The *same* architecture is instantiated independently inside each hospital node |
+| A baseline accuracy number exists | Federated training is judged against this number in the Mid-Project "Federated Audit" |
+| Three node processes can run and be addressed independently | Real data partitioning, local training, and FedAvg aggregation are added between them |
+| A central coordinator process exists | The coordinator gains the actual broadcast → collect → aggregate round logic |
+
+---
+
+## 9. Suggested Daily Commit Breakdown (Descriptive Only)
+
+| Day | Focus | What the Commit Represents |
+|---|---|---|
+| 1 | Repository Initialization | Project structure, README, dependency manifest, and ignore rules established |
+| 2 | Dataset Understanding | Description/documentation of how BraTS MRI data is structured and will be consumed |
+| 3 | Model Architecture Definition | Written specification of the 3D U-Net design and its inputs/outputs |
+| 4 | Training Strategy | Documentation of the loss function, evaluation metric (Dice score), and training loop design |
+| 5 | Baseline Results | Recorded outcome of the centralized training run — the benchmark accuracy |
+| 6 | Node Topology | Documentation of the three-node, one-coordinator scaffold design and port assignments |
+| 7 | Week 1 Review | Summary document tying both tracks together and stating what's carried into Week 2 |
+
+---
+
+## 10. Key Takeaway for Week 1
+
+Week 1 is a **proof of feasibility**, not a proof of privacy. It answers: *"Can this model learn the task, and can this many independent nodes exist side by side?"* Every privacy guarantee — encrypted communication, homomorphic aggregation, differential privacy — is layered on **top of** this foundation starting Week 2. Nothing in Week 1 involves real patient data or real inter-node communication of model weights; both are simulated or absent, by design.
+
 📌 *This document is part of the FedMed daily-commit build log. See
 [docs/WEEKLY_PLAN.md](WEEKLY_PLAN.md) for the full 4-week roadmap and
 [docs/ARCHITECTURE.md](ARCHITECTURE.md) for system-wide design details.*
