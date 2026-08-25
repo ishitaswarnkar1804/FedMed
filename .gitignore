@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.env
+
+# ML models / checkpoints
+*.pt
+*.pth
+*.ckpt
+
+# Medical datasets
+data/*
+*.nii
+*.nii.gz
+*.dcm
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
