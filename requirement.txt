@@ -1,0 +1,9 @@
+torch
+torchvision
+monai
+numpy
+pandas
+scikit-learn
+nibabel
+pydicom
+matplotlib
