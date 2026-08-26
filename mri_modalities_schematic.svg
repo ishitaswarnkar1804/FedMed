@@ -1,0 +1,65 @@
+<svg width="960" height="260" viewBox="0 0 960 260" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Schematic of four MRI modalities and the resulting segmentation mask</title>
+<desc>Five panels: T1, T1ce, T2, FLAIR schematic brain cross-sections each highlighting a tumor differently, followed by the combined segmentation mask with color-coded tumor sub-regions.</desc>
+
+<rect width="960" height="260" fill="#ffffff"/>
+
+<!-- Panel template repeated 5x: x offsets 20,200,380,560,760 -->
+
+<!-- Panel 1: T1 -->
+<g>
+<rect x="20" y="20" width="160" height="180" rx="10" fill="#f4f4f4" stroke="#999" stroke-width="1"/>
+<ellipse cx="100" cy="110" rx="65" ry="75" fill="#e5e5e5" stroke="#888" stroke-width="1.5"/>
+<circle cx="100" cy="120" r="18" fill="#d8d8d8" stroke="#aaa" stroke-width="1"/>
+<text x="100" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">T1</text>
+<text x="100" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">Anatomy baseline</text>
+</g>
+
+<!-- Panel 2: T1ce -->
+<g>
+<rect x="200" y="20" width="160" height="180" rx="10" fill="#f4f4f4" stroke="#999" stroke-width="1"/>
+<ellipse cx="280" cy="110" rx="65" ry="75" fill="#e5e5e5" stroke="#888" stroke-width="1.5"/>
+<circle cx="280" cy="120" r="18" fill="#fce38a" stroke="#e8b800" stroke-width="2"/>
+<text x="280" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">T1ce</text>
+<text x="280" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">Tumor core lights up</text>
+</g>
+
+<!-- Panel 3: T2 -->
+<g>
+<rect x="380" y="20" width="160" height="180" rx="10" fill="#f4f4f4" stroke="#999" stroke-width="1"/>
+<ellipse cx="460" cy="110" rx="65" ry="75" fill="#e5e5e5" stroke="#888" stroke-width="1.5"/>
+<circle cx="460" cy="120" r="30" fill="#b8ddf0" opacity="0.8" stroke="#6fb3d9" stroke-width="1"/>
+<circle cx="460" cy="120" r="14" fill="#8fc6e6"/>
+<text x="460" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">T2</text>
+<text x="460" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">Edema shows brighter</text>
+</g>
+
+<!-- Panel 4: FLAIR -->
+<g>
+<rect x="560" y="20" width="160" height="180" rx="10" fill="#f4f4f4" stroke="#999" stroke-width="1"/>
+<ellipse cx="640" cy="110" rx="65" ry="75" fill="#dcdcdc" stroke="#888" stroke-width="1.5"/>
+<circle cx="640" cy="120" r="38" fill="#a8d4ec" opacity="0.9" stroke="#5aa8d1" stroke-width="1"/>
+<circle cx="640" cy="120" r="14" fill="#7fbfe0"/>
+<text x="640" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">FLAIR</text>
+<text x="640" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">Edema clearest here</text>
+</g>
+
+<!-- Panel 5: Segmentation mask (combined result) -->
+<g>
+<rect x="760" y="20" width="180" height="180" rx="10" fill="#f4f4f4" stroke="#999" stroke-width="1"/>
+<ellipse cx="850" cy="110" rx="65" ry="75" fill="#e5e5e5" stroke="#888" stroke-width="1.5"/>
+<circle cx="850" cy="120" r="30" fill="#8fc6e6" opacity="0.85"/>
+<circle cx="850" cy="120" r="20" fill="#f4a24c"/>
+<circle cx="850" cy="120" r="10" fill="#c0392b"/>
+<text x="850" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Segmentation mask</text>
+<text x="850" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#666">Radiologist ground truth</text>
+</g>
+
+<!-- Legend -->
+<g font-family="Arial, sans-serif" font-size="11" fill="#333">
+<circle cx="30" cy="252" r="5" fill="#c0392b"/><text x="42" y="256">Necrotic core</text>
+<circle cx="170" cy="252" r="5" fill="#f4a24c"/><text x="182" y="256">Enhancing tumor</text>
+<circle cx="330" cy="252" r="5" fill="#8fc6e6"/><text x="342" y="256">Edema</text>
+</g>
+
+</svg>
