@@ -9,7 +9,7 @@ Let me pull up some visual references to make this concrete.
 
 *(Note: the original chat pulled up real BraTS example photos via image search. Those are copyrighted stock/paper images and can't be redistributed in this repo, so the schematic below is an original illustration built to convey the same concept — how the four modalities and the segmentation mask relate to each other.)*
 
-![Schematic of the four MRI modalities and the resulting segmentation mask](images/mri_modalities_schematic.svg)
+![Schematic of the four MRI modalities and the resulting segmentation mask](mri_modalities_schematic.svg)
 
 The panels above show what one patient's data conceptually looks like: **four different MRI scans of the same brain**, taken with different imaging settings (called "modalities"), plus the ground-truth tumor outline drawn by radiologists — the necrotic core, edema, and enhancing tumor regions each in a different color.
 
