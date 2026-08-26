@@ -69,7 +69,7 @@ Let me sketch the architecture so it's concrete rather than abstract.
 
 Now let me sketch the U-Net architecture itself:
 
-![3D U-Net architecture — encoder path, bottleneck, decoder path, and skip connections](images/unet3d_architecture.svg)
+![3D U-Net architecture — encoder path, bottleneck, decoder path, and skip connections](unet3d_architecture.svg)
 
 The architecture is a **U-Net**: an encoder-decoder network with a distinctive feature — skip connections — that make it especially good at pixel-precise (voxel-precise) medical segmentation. The same structure is shown below as a flowchart for quick reference.
 
