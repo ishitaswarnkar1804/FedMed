@@ -3,7 +3,6 @@
 **Phase:** Foundation Week
 **Focus Areas:** Medical Computer Vision (PyTorch/MONAI) + Distributed Systems Scaffolding (Flower)
 **Status:** 🚧 In Progress
-
 ---
 
 ## Table of Contents
