@@ -463,7 +463,6 @@ FedMed/
 │
 ├── data/
 │   └── README.md
-│
 ├── requirements.txt
 ├── docker-compose.yml
 └── README.md
