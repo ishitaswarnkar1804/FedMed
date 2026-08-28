@@ -1,6 +1,6 @@
 # 🏥 FedMed
 
-### Privacy-Preserving Federated Learning for Medical AI
+### Privacy-Preserving Federated Learning for Medical 
 
 <p align="center">
 
