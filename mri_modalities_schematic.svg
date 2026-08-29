@@ -3,7 +3,7 @@
 <desc>Five panels: T1, T1ce, T2, FLAIR schematic brain cross-sections each highlighting a tumor differently, followed by the combined segmentation mask with color-coded tumor sub-regions.</desc>
 
 <rect width="960" height="260" fill="#ffffff"/>
-
+  
 <!-- Panel template repeated 5x: x offsets 20,200,380,560,760 -->
 
 <!-- Panel 1: T1 -->
