@@ -1,0 +1,57 @@
+project:
+  name: fedmed
+  random_seed: 42
+
+federation:
+  num_rounds: 8
+  min_clients: 3
+  local_epochs: 1
+  fraction_fit: 1.0
+  fraction_evaluate: 1.0
+
+model:
+  architecture: unet3d
+  spatial_size: [96, 96, 96]
+  in_channels: 4
+  out_channels: 3
+  channels: [16, 32, 64, 128]
+  strides: [2, 2, 2]
+  num_res_units: 2
+
+data:
+  dataset: Task01_BrainTumour
+  root_dir: data/msd
+  silos:
+    - hospital_a
+    - hospital_b
+    - hospital_c
+  synthetic:
+    enabled: true
+    num_train: 6
+    num_val: 2
+    volume_size: [96, 96, 96]
+
+training:
+  batch_size: 1
+  lr: 0.0001
+  amp: true
+  num_workers: 2
+  max_train_samples: 4
+  max_val_samples: 2
+
+privacy:
+  mode: plain
+  chunk_size: 8192
+  keys_dir: keys/
+
+server:
+  address: 0.0.0.0
+  port: 8080
+
+metrics:
+  log_path: logs/metrics.jsonl
+
+paths:
+  reports: reports
+  logs: logs
+  checkpoints: checkpoints
