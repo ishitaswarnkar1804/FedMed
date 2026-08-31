@@ -1,7 +1,7 @@
 project:
   name: fedmed
   random_seed: 42
-
+  
 federation:
   num_rounds: 8
   min_clients: 3
