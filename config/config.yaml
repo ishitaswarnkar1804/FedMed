@@ -26,7 +26,7 @@ data:
     - hospital_b
     - hospital_c
   synthetic:
-    enabled: true
+    enabled: false
     num_train: 6
     num_val: 2
     volume_size: [96, 96, 96]
