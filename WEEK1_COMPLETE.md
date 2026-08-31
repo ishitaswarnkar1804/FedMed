@@ -5,7 +5,7 @@
 
 This single file contains every piece of code written during Week 1 of the
 FedMed project, exactly as it was run and tested. It covers both Week 1
-tracks:
+tracks: l
 
 - **Track A — Centralized Baseline**: a real 3D U-Net (MONAI/PyTorch)
   trained end-to-end on MRI-shaped data, producing an actual Dice score
