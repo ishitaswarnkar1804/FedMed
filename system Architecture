@@ -1,0 +1,48 @@
+                  ┌──────────────────────────┐
+                  │       FEDMED SYSTEM      │
+                  │ Federated Medical AI     │
+                  └────────────┬─────────────┘
+                               │
+             ┌─────────────────┴─────────────────┐
+             │                                   │
+             ▼                                   ▼
+   ┌────────────────────┐             ┌────────────────────┐
+   │   Hospital / Node 1│             │   Hospital / Node 2│
+   │                    │             │                    │
+   │ Patient Medical    │             │ Patient Medical    │
+   │ Data               │             │ Data               │
+   │        ↓           │             │        ↓           │
+   │ Local Preprocessing│             │ Local Preprocessing│
+   │        ↓           │             │        ↓           │
+   │ Local ML Model     │             │ Local ML Model     │
+   └─────────┬──────────┘             └─────────┬──────────┘
+             │                                  │
+             │        Model Updates             │
+             └──────────────┬───────────────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │  FEDERATED SERVER    │
+                 │                      │
+                 │ Secure Aggregation   │
+                 │         ↓            │
+                 │ Model Aggregation    │
+                 │    (FedAvg etc.)     │
+                 └──────────┬───────────┘
+                            │
+                     Global Model
+                            │
+              ┌─────────────┴─────────────┐
+              │                           │
+              ▼                           ▼
+      ┌─────────────────┐       ┌──────────────────┐
+      │ Updated Model   │       │ Performance      │
+      │ sent to Nodes   │       │ Evaluation       │
+      └────────┬────────┘       └──────────────────┘
+               │
+               ▼
+       ┌──────────────────┐
+       │ Medical          │
+       │ Prediction       │
+       │ / Diagnosis      │
+       └──────────────────┘
