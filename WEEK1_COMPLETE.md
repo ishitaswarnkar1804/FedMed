@@ -95,7 +95,6 @@ import torch
 from monai.networks.nets import UNet
 from monai.networks.layers import Norm
 
-
 def get_model(
     in_channels: int = 4,
     out_channels: int = 4,
