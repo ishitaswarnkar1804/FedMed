@@ -937,6 +937,17 @@ flowchart TD
 
 ---
 
+
+
+### Week-1 Outcome
+
+
+<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/c504c27f-417c-4e94-b213-9668724d1c94" />
+
+
+---
+
+
 # ⚠️ Disclaimer
 
 FedMed is an **educational/research prototype** and is **not intended for clinical diagnosis or treatment**.
