@@ -31,6 +31,14 @@ Instead of sending patient data to a centralized server, each hospital trains th
 
 ---
 
+### Week-1 Outcome
+
+
+<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/c504c27f-417c-4e94-b213-9668724d1c94" />
+
+
+---
+
 ## 📑 Table of Contents
 
 * [Overview](#-overview)
@@ -939,13 +947,7 @@ flowchart TD
 
 
 
-### Week-1 Outcome
 
-
-<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/c504c27f-417c-4e94-b213-9668724d1c94" />
-
-
----
 
 
 # ⚠️ Disclaimer
