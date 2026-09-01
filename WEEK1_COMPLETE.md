@@ -1,109 +1,83 @@
-# 🧠 FedMed
-
-<p align="center">
-  <img src="https://img.shields.io/badge/FedMed-Privacy--Preserving%20Medical%20AI-6C63FF?style=for-the-badge" alt="FedMed">
-</p>
-
-<p align="center">
-  <strong>Federated Learning for Privacy-Preserving Brain Tumor Segmentation</strong>
-</p>
-
-<p align="center">
-  A cross-silo federated learning framework that enables multiple hospitals
-  to collaboratively train a 3D U-Net without centralizing sensitive MRI data.
-</p>
+# 🧠 FedMed — Week 1 Complete Build
 
 <p align="center">
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.2%2B-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
-![MONAI](https://img.shields.io/badge/MONAI-1.3%2B-2C8EBB?style=flat-square)
-![Flower](https://img.shields.io/badge/Flower-1.8%2B-FF6F00?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-6%20Passed-success?style=flat-square)
-![Week](https://img.shields.io/badge/Week%201-Complete-6C63FF?style=flat-square)
+# FedMed
+
+### Privacy-Preserving Federated Brain Tumor Segmentation
+
+**Foundation Week — Centralized Baseline + Federated Node Scaffolding**
+
+<br>
+
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.2%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![MONAI](https://img.shields.io/badge/MONAI-1.3%2B-2C8EBB?style=for-the-badge)
+![Flower](https://img.shields.io/badge/Flower-1.8%2B-FF6F00?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-6%2F6%20Passed-success?style=for-the-badge)
 
 </p>
 
 ---
 
-## 🌟 Overview
+## 📌 Week 1 Status
 
-Medical institutions often cannot freely share patient MRI scans because of
-privacy, security, and regulatory constraints.
-
-**FedMed solves this problem using Federated Learning.**
-
-Instead of moving MRI data to a central server:
-
-> 🏥 **Data stays inside the hospital.**  
-> 🧠 **The model travels between hospitals.**  
-> 🔄 **Knowledge is aggregated centrally.**
-
-The project uses a **3D U-Net** for brain tumor segmentation and
-**Flower** for the federated learning infrastructure.
+| Component | Status |
+|---|:---:|
+| 3D U-Net | ✅ Complete |
+| Synthetic MRI Dataset | ✅ Complete |
+| Centralized Training | ✅ Complete |
+| Dice Evaluation | ✅ Complete |
+| Model Checkpoint | ✅ Complete |
+| Training Visualization | ✅ Complete |
+| Flower Server | ✅ Complete |
+| Hospital Node 1 | ✅ Complete |
+| Hospital Node 2 | ✅ Complete |
+| Hospital Node 3 | ✅ Complete |
+| Client/Server Wiring | ✅ Complete |
+| Automated Tests | ✅ 6/6 Passed |
 
 ---
 
-# 🏗️ System Architecture
+# 🌟 Project Overview
 
-```mermaid
-flowchart TB
+FedMed is a cross-silo federated learning framework designed for
+**privacy-preserving brain tumor segmentation from MRI scans**.
 
-    SERVER["🧠 FEDMED CENTRAL SERVER
-    <br/>
-    Flower ServerApp
-    <br/>
-    Global 3D U-Net"]
+The project follows a simple principle:
 
-    LINK["🌐 FLOWER SUPERLINK
-    <br/>
-    Central Communication Layer"]
+> **Patient MRI data stays inside the hospital.  
+> Model knowledge is exchanged between hospitals and the server.**
 
-    H1["🏥 HOSPITAL 1
-    <br/>
-    SuperNode :9094"]
+Instead of pooling sensitive medical data into one centralized dataset,
+each hospital can eventually train locally and contribute model updates
+to a shared global model.
 
-    H2["🏥 HOSPITAL 2
-    <br/>
-    SuperNode :9095"]
+---
 
-    H3["🏥 HOSPITAL 3
-    <br/>
-    SuperNode :9096"]
+# 🏗️ Week 1 Architecture
 
-    D1[("🔒 Private MRI Data")]
-    D2[("🔒 Private MRI Data")]
-    D3[("🔒 Private MRI Data")]
-
-    C1["⚙️ Local Client"]
-    C2["⚙️ Local Client"]
-    C3["⚙️ Local Client"]
-
-    SERVER <--> LINK
-
-    LINK <--> H1
-    LINK <--> H2
-    LINK <--> H3
-
-    H1 --> C1
-    H2 --> C2
-    H3 --> C3
-
-    D1 --> C1
-    D2 --> C2
-    D3 --> C3
-
-    C1 -. "Model Updates" .-> SERVER
-    C2 -. "Model Updates" .-> SERVER
-    C3 -. "Model Updates" .-> SERVER
-
-    style SERVER fill:#6C63FF,color:#fff,stroke:#4B43B6,stroke-width:3px
-    style LINK fill:#24292F,color:#fff,stroke:#000,stroke-width:2px
-
-    style H1 fill:#E8F1FF,stroke:#3776AB,stroke-width:2px
-    style H2 fill:#E8F1FF,stroke:#3776AB,stroke-width:2px
-    style H3 fill:#E8F1FF,stroke:#3776AB,stroke-width:2px
-
-    style D1 fill:#FFF4E5,stroke:#FF9800
-    style D2 fill:#FFF4E5,stroke:#FF9800
-    style D3 fill:#FFF4E5,stroke:#FF9800
+```text
+                           ┌───────────────────────────┐
+                           │       🧠 FEDMED           │
+                           │      CENTRAL SERVER       │
+                           │                           │
+                           │       Global Model        │
+                           │          FedAvg           │
+                           └─────────────┬─────────────┘
+                                         │
+                                  🌐 Flower
+                                  SuperLink
+                                         │
+              ┌──────────────────────────┼──────────────────────────┐
+              │                          │                          │
+              ▼                          ▼                          ▼
+      ┌───────────────┐          ┌───────────────┐          ┌───────────────┐
+      │  🏥 HOSPITAL 1│          │  🏥 HOSPITAL 2│          │  🏥 HOSPITAL 3│
+      │               │          │               │          │               │
+      │    :9094      │          │    :9095      │          │    :9096      │
+      │               │          │               │          │               │
+      │ 🔒 Private MRI│          │ 🔒 Private MRI│          │ 🔒 Private MRI│
+      │               │          │               │          │               │
+      │ Local Client  │          │ Local Client  │          │ Local Client  │
+      └───────────────┘          └───────────────┘          └───────────────┘
