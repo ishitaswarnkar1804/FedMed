@@ -1,4 +1,4 @@
-"""Dataset loaders for hospital silos and synthetic smoke tests."""
+""" Dataset loaders for hospital silos and synthetic smoke tests."""
 
 from __future__ import annotations
 
