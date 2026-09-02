@@ -1,0 +1,238 @@
+                         ┌─────────────────────┐
+                         │      FEDMED         │
+                         │   User Interface    │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                    ┌───────────────────────────┐
+                    │  1. Data Management       │
+                    │  Medical Data Collection  │
+                    └─────────────┬─────────────┘
+                                  │
+                                  ▼
+                    ┌───────────────────────────┐
+                    │  2. Data Preprocessing    │
+                    │ Cleaning • Encoding       │
+                    │ Normalization             │
+                    └─────────────┬─────────────┘
+                                  │
+              ┌───────────────────┼───────────────────┐
+              │                   │                   │
+              ▼                   ▼                   ▼
+        ┌───────────┐       ┌───────────┐       ┌───────────┐
+        │ Hospital 1│       │ Hospital 2│  ...  │ Hospital N│
+        │ Local Node│       │ Local Node│       │ Local Node│
+        └─────┬─────┘       └─────┬─────┘       └─────┬─────┘
+              │                   │                   │
+              ▼                   ▼                   ▼
+        ┌─────────────────────────────────────────────────┐
+        │          3. Local Model Training                │
+        │       ML / Deep Learning at Each Node            │
+        └──────────────────────┬──────────────────────────┘
+                               │
+                               ▼
+                    ┌───────────────────────────┐
+                    │ 4. Model Update Sharing   │
+                    │   Secure Communication    │
+                    └─────────────┬─────────────┘
+                                  │
+                                  ▼
+                    ┌───────────────────────────┐
+                    │ 5. Federated Server       │
+                    │   Secure Aggregation       │
+                    │        FedAvg              │
+                    └─────────────┬─────────────┘
+                                  │
+                                  ▼
+                    ┌───────────────────────────┐
+                    │ 6. Global Model           │
+                    │ Evaluation & Improvement  │
+                    └─────────────┬─────────────┘
+                                  │
+                                  ▼
+                    ┌───────────────────────────┐
+                    │ 7. Prediction Module      │
+                    │ Disease / Risk Prediction │
+                    └─────────────┬─────────────┘
+                                  │
+                                  ▼
+                    ┌───────────────────────────┐
+                    │ 8. Results & Dashboard     │
+                    │ Prediction • Metrics       │
+                    └───────────────────────────┘
+
+                    
+
+
+
+1. Data Management Module
+
+This module handles the medical data available at different hospitals/healthcare institutions.
+
+Input can include:
+
+Patient demographic information
+Medical history
+Laboratory results
+Symptoms
+Clinical measurements
+Disease labels
+
+The important point is that raw patient data remains at the local institution
+
+
+
+2. Data Preprocessing Module
+
+Before training the model, each hospital preprocesses its own data.
+
+Tasks include:
+
+Removing duplicate/inconsistent records
+Handling missing values
+Encoding categorical data
+Feature selection
+Data normalization/scaling
+Splitting data into training and testing sets
+
+Raw Medical Data
+       ↓
+Cleaning
+       ↓
+Missing Value Handling
+       ↓
+Feature Engineering
+       ↓
+Normalization
+       ↓
+Training Dataset
+
+
+
+3. Local Training Module
+
+This is one of the most important modules.
+
+Each hospital acts as a federated client/local node.
+
+For example:
+Hospital 1 → Local Model 1
+Hospital 2 → Local Model 2
+Hospital 3 → Local Model 3
+
+Each hospital trains the model using its own patient data.
+
+The raw data does not need to be sent to the central server.
+
+Depending on the FedMed use case, the model could be:
+
+Logistic Regression
+Random Forest
+SVM
+Neural Network
+CNN
+Other appropriate ML/DL models
+
+
+4. Model Update Sharing Module
+
+After local training, each hospital sends model parameters/updates, rather than its raw medical records.
+Hospital
+   ↓
+Local Training
+   ↓
+Updated Model Parameters
+   ↓
+Federated Server
+
+This is what enables collaborative learning while reducing the need to centralize sensitive medical data.
+
+
+5. Federated Server Module
+
+The federated server coordinates the participating hospitals.
+
+It:
+
+Sends the current global model to clients.
+Receives local model updates.
+Aggregates the updates.
+Produces a new global model.
+Sends the improved model back to clients.
+
+A common aggregation algorithm is FedAvg (Federated Averaging).
+
+Conceptually:
+Model 1 ─┐
+Model 2 ─┤
+Model 3 ─┼──→ FedAvg ──→ Global Model
+Model N ─┘
+
+
+6. Global Model & Evaluation Module
+
+After aggregation, FedMed evaluates the global model.
+
+Typical metrics include:
+
+Accuracy
+Precision
+Recall
+F1-score
+ROC-AUC
+Confusion Matrix
+
+The process can be repeated for multiple federated rounds:
+
+Global Model
+     ↓
+Send to Hospitals
+     ↓
+Local Training
+     ↓
+Collect Updates
+     ↓
+Aggregation
+     ↓
+New Global Model
+     ↓
+Evaluation
+     ↓
+Repeat
+
+
+7. Medical Prediction Module
+
+Once the global model reaches acceptable performance, it can be used for prediction.
+
+For example:
+
+Patient Information
+        ↓
+Preprocessing
+        ↓
+Trained Global Model
+        ↓
+Prediction
+        ↓
+Disease/Risk Result
+
+Depending on the exact FedMed problem statement, the output could be a disease classification, risk score, or other medical prediction.
+
+
+8. Dashboard / User Interface Module
+
+The final module provides a simple interface for users such as researchers, healthcare professionals, or administrators.
+
+The dashboard can display:
+
+Patient input
+Prediction
+Confidence/probability
+Model accuracy
+Federated training rounds
+Client performance
+Global model performance
+Evaluation metrics
+
+For your implementation, Streamlit would be a relatively simple choice for the frontend.
