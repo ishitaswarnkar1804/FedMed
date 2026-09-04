@@ -156,6 +156,21 @@ flowchart TB
     class AU,BU,CU privacy
     class M model
 ```
+### Layer 1  Flower Server Component
+Responsibilities:
+• Listens for client connections on localhost:8080
+• Orchestrates federated learning rounds
+• Receives model updates (deltas) from clients
+• Aggregates updates (plain FedAvg or encrypted HE aggregation)
+• Sends global model back to clients for next round
+• Logs metrics to JSONL file
+
+Key Classes & Functions:
+• FedMedStrategy(FedAvg): Custom strategy extending Flower's FedAvg
+    - aggregate_fit(): Handles encrypted or plaintext delta aggregation
+    - aggregate_evaluate(): Logs evaluation metrics
+• aggregate_encrypted_deltas(): Performs encrypted vector summation without decryption
+• is_encrypted_update(): Checks if received update is encrypted
 
 ### 🔄 Training Cycle
 
