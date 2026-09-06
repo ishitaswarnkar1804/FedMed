@@ -99,7 +99,8 @@ flowchart LR
 ### Data Loading & Silos
 Files: src/data/silo_loader.py, src/data/
 
-``` Responsibilities:
+```mermaid
+ Responsibilities:
 • Loads hospital-specific MRI datasets (or synthetic data for testing)
 • Splits data into training and validation sets per hospital
 • Creates PyTorch DataLoaders for efficient batch processing
