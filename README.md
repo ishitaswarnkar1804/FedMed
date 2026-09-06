@@ -99,7 +99,7 @@ flowchart LR
 ### Data Loading & Silos
 Files: src/data/silo_loader.py, src/data/
 
-Responsibilities:
+``` Responsibilities:
 • Loads hospital-specific MRI datasets (or synthetic data for testing)
 • Splits data into training and validation sets per hospital
 • Creates PyTorch DataLoaders for efficient batch processing
@@ -110,6 +110,7 @@ Silo Structure:
 Each hospital silo contains:
 • hospital_a/images/ - Local MRI scans
 • hospital_a/masks/ - Tumor segmentation ground truth
+```
 
 ### The Problem
 
