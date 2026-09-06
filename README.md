@@ -74,7 +74,7 @@ FedMed addresses this problem by allowing hospitals to **train collaboratively w
 
 ### Traditional Medical AI
 
-```mermaid
+```
 flowchart LR
     A["🏥 Hospital A<br/>Private Patient Data"]
     B["🏥 Hospital B<br/>Private Patient Data"]
