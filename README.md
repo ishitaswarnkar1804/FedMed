@@ -1,6 +1,6 @@
 # 🏥 FedMed
 
-### Privacy-Preserving Federated Learning for Medical 
+### Privacy-Preserving Federated Learning for Medical AI
 
 <p align="center">
 
@@ -28,14 +28,6 @@ It enables multiple hospitals to collaboratively train a **3D brain-tumor segmen
 Instead of sending patient data to a centralized server, each hospital trains the model locally and sends only **protected model updates** for global aggregation.
 
 > 🔐 **Raw MRI scans never leave their respective hospital nodes.**
-
----
-
-### Week-1 Outcome
-
-
-<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/c504c27f-417c-4e94-b213-9668724d1c94" />
-
 
 ---
 
@@ -82,7 +74,7 @@ FedMed addresses this problem by allowing hospitals to **train collaboratively w
 
 ### Traditional Medical AI
 
-```mermaid
+```
 flowchart LR
     A["🏥 Hospital A<br/>Private Patient Data"]
     B["🏥 Hospital B<br/>Private Patient Data"]
@@ -103,6 +95,22 @@ flowchart LR
     class A,B,C hospital
     class D central
     class E model
+```
+### Data Loading & Silos
+Files: src/data/silo_loader.py, src/data/
+
+```mermaid
+ Responsibilities:
+• Loads hospital-specific MRI datasets (or synthetic data for testing)
+• Splits data into training and validation sets per hospital
+• Creates PyTorch DataLoaders for efficient batch processing
+• Each hospital has isolated data—never shared with other hospitals
+• Supports BRATS dataset format (3D NIfTI files + tumor masks)
+
+Silo Structure:
+Each hospital silo contains:
+• hospital_a/images/ - Local MRI scans
+• hospital_a/masks/ - Tumor segmentation ground truth
 ```
 
 ### The Problem
@@ -471,6 +479,7 @@ FedMed/
 │
 ├── data/
 │   └── README.md
+│
 ├── requirements.txt
 ├── docker-compose.yml
 └── README.md
@@ -944,11 +953,6 @@ flowchart TD
 > 💡 **FedMed demonstrates how privacy-preserving machine learning can make cross-institution medical AI collaboration possible.**
 
 ---
-
-
-
-
-
 
 # ⚠️ Disclaimer
 
