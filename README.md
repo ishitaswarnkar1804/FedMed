@@ -97,7 +97,7 @@ flowchart LR
     class E model
 ```
 ### Data Loading & Silos
-Files: src/data/silo_loader.py, src/data/
+Files: src/data/silo_loader.py, src/data
 
 ```mermaid
  Responsibilities:
