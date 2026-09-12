@@ -16,7 +16,7 @@ class MedicalDataGuardrail:
     def __init__(self, schema: ImageSchema):
         self.schema = schema
 
-    def validate_dicom_file(self, image_path: str, mask_path: Optional[str] = None) -> Dict[str, any]:
+    def validate_dicom_file(self., image_path: str, mask_path: Optional[str] = None) -> Dict[str, any]:
         errors = []
         
         # 1. File existence & basic header readability
