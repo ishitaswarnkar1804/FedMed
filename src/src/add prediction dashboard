@@ -1,0 +1,94 @@
+FedMed/
+│
+├── dashboard/
+│   └── dashboard.py
+│
+├── src/
+│   └── predict.py
+│
+└── requirements.txt
+
+
+
+import streamlit as st
+import pandas as pd
+import joblib
+import os
+
+st.set_page_config(
+    page_title="FedMed Prediction Dashboard",
+    page_icon="🏥",
+    layout="wide"
+)
+
+st.title("🏥 FedMed Prediction Dashboard")
+st.write("Medical disease prediction using machine learning")
+
+MODEL_PATH = "models/fedmed_model.pkl"
+SCALER_PATH = "models/scaler.pkl"
+
+if not os.path.exists(MODEL_PATH) or not os.path.exists(SCALER_PATH):
+    st.error("Model files not found. Please train the model first.")
+    st.stop()
+
+model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
+
+st.subheader("Patient Data")
+
+feature_names = [
+    "mean radius", "mean texture", "mean perimeter", "mean area",
+    "mean smoothness", "mean compactness", "mean concavity",
+    "mean concave points", "mean symmetry", "mean fractal dimension",
+    "radius error", "texture error", "perimeter error", "area error",
+    "smoothness error", "compactness error", "concavity error",
+    "concave points error", "symmetry error", "fractal dimension error",
+    "worst radius", "worst texture", "worst perimeter", "worst area",
+    "worst smoothness", "worst compactness", "worst concavity",
+    "worst concave points", "worst symmetry", "worst fractal dimension"
+]
+
+values = []
+
+cols = st.columns(3)
+
+for i, feature in enumerate(feature_names):
+    with cols[i % 3]:
+        value = st.number_input(
+            feature,
+            value=0.0,
+            format="%.4f"
+        )
+        values.append(value)
+
+if st.button("🔍 Predict", type="primary"):
+
+    input_data = pd.DataFrame([values], columns=feature_names)
+
+    scaled_data = scaler.transform(input_data)
+
+    prediction = model.predict(scaled_data)[0]
+
+    if hasattr(model, "predict_proba"):
+        probabilities = model.predict_proba(scaled_data)[0]
+        confidence = max(probabilities) * 100
+    else:
+        confidence = None
+
+    st.subheader("Prediction Result")
+
+    if prediction == 0:
+        st.error("Prediction: Malignant")
+    else:
+        st.success("Prediction: Benign")
+
+    if confidence is not None:
+        st.metric(
+            "Prediction Confidence",
+            f"{confidence:.2f}%"
+        )
+
+    st.info(
+        "This dashboard is for research/educational purposes "
+        "and should not be used as a medical diagnosis."
+    )
