@@ -58,6 +58,10 @@ Instead of sending patient data to a centralized server, each hospital trains th
 
 ---
 
+## Week-1 Poster_Explanation
+<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/789725ec-5bbf-4873-955c-86c94791b115" />
+
+
 # 🎯 Problem Statement
 
 Training accurate machine-learning models for rare diseases requires large and diverse datasets.
