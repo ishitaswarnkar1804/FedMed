@@ -56,13 +56,10 @@ Instead of sending patient data to a centralized server, each hospital trains th
 * [Contributing](#-contributing)
 * [License](#-license)
 
----
 
 ## Week-1 Poster_Explanation
-<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/4b02eadd-de17-4f6a-baeb-a83bfbc38b18" />
+<img width="1024" height="1536" alt="week1_PosterExplanation" src="https://github.com/user-attachments/assets/ad5e1342-f1c5-46b2-9b00-405c5295b701" />
 
-
----
 
 
 # 🎯 Problem Statement
@@ -132,7 +129,7 @@ Centralizing medical data creates significant:
 
 FedMed replaces centralized data collection with **Federated Learning**.
 
-```mermaid
+```mermaid   
 flowchart TB
 
     S["🌐 FedMed Server<br/><br/>Global 3D U-Net<br/>+<br/>Secure Aggregation"]
