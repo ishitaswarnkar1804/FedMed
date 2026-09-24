@@ -1,0 +1,208 @@
+The FedMed system can also be extended to support different machine learning models.
+
+For example:
+
+FedMed
+ │
+ ├── Logistic Regression
+ ├── Neural Network
+ ├── SVM
+ ├── Decision Tree
+ └── Other Federated Models
+
+For actual FedAvg-style federated learning, the model needs parameters that can be meaningfully aggregated. Neural networks and linear models are commonly suited to this approach.
+
+Different models can also be evaluated using:
+
+Accuracy
+Precision
+Recall
+F1-score
+ROC-AUC
+Confusion matrix
+
+
+Computational Scalability
+
+As the number of clients increases, the federated server has to process more model updates.
+
+A simplified process is:
+
+Client 1 ──┐
+Client 2 ──┤
+Client 3 ──┤
+Client 4 ──┼──→ Server
+Client 5 ──┤
+Client N ──┘
+             ↓
+       Aggregate Updates
+             ↓
+        Global Model
+
+To support larger deployments, the system can use:
+
+Multi-core processing
+Distributed servers
+Cloud infrastructure
+Containerization
+Load balancing
+Asynchronous client participation
+
+
+Network Scalability
+
+Federated learning requires communication between clients and the federated server.
+
+A typical communication cycle is:
+
+Server
+  ↓
+Global Model
+  ↓
+Clients
+  ↓
+Local Training
+  ↓
+Model Updates
+  ↓
+Server
+  ↓
+Aggregation
+
+As the number of clients increases, communication traffic also increases.
+
+FedMed can reduce communication requirements through techniques such as:
+
+Model compression
+Update compression
+Fewer communication rounds
+Client selection
+Quantization
+Efficient serialization
+
+
+ API Scalability
+
+The FedMed prediction API can also be designed to support multiple users.
+
+For example:
+
+User 1 ──┐
+User 2 ──┤
+User 3 ──┼──→ FedMed API ──→ ML Model
+User 4 ──┤
+User N ──┘
+
+Instead of processing only one request, the API can eventually support many concurrent requests using appropriate deployment infrastructure.
+
+Possible technologies include:
+
+FastAPI
+Uvicorn
+Docker
+Cloud deployment
+Load balancing
+
+
+Dashboard Scalability
+
+The Streamlit dashboard can provide a user interface for the system.
+
+A future architecture could be:
+
+Healthcare User
+       ↓
+FedMed Dashboard
+       ↓
+FedMed API
+       ↓
+Prediction Model
+       ↓
+Prediction Result
+
+For larger deployments, the dashboard and API can be deployed separately.
+
+This provides better separation between:
+
+User interface
+API
+ML model
+Federated server
+Data processing
+
+
+Storage Scalability
+
+Medical datasets can become very large.
+
+Instead of storing everything in one local CSV file, a production-oriented FedMed system could use:
+
+Local Hospital Storage
+        ↓
+Database / Data Lake
+        ↓
+Local ML Pipeline
+        ↓
+Federated Learning
+
+Possible storage technologies could include:
+
+PostgreSQL
+MySQL
+MongoDB
+Cloud object storage
+Data lakes
+
+For your current M.Tech prototype, CSV files are sufficient for demonstrating the pipeline. Larger deployments would require more scalable storage infrastructure.
+
+Horizontal Scalability
+
+Horizontal scaling means adding more machines or clients rather than making one machine increasingly powerful.
+
+For FedMed:
+
+          Federated Server
+                │
+       ┌────────┼────────┐
+       ↓        ↓        ↓
+    Server 1 Server 2 Server 3
+
+This approach can distribute computational workloads across multiple machines.
+
+It is particularly relevant when the number of participating organizations grows.
+
+Vertical Scalability
+
+Vertical scaling means increasing the resources of an existing machine.
+
+For example:
+
+4 GB RAM
+   ↓
+8 GB RAM
+   ↓
+16 GB RAM
+   ↓
+32 GB RAM
+
+Similarly, CPU/GPU resources can be increased to handle larger datasets or more computationally intensive models.
+
+Scalability Through Modular Architecture
+
+FedMed's modular architecture also makes future expansion easier.
+
+FedMed
+│
+├── Privacy
+├── Data Validation
+├── Preprocessing
+├── Federated Learning
+├── Model Training
+├── Evaluation
+├── Prediction API
+├── Dashboard
+└── Monitoring
+
+Each component can be improved independently.
+
+For example, you can upgrade the prediction API without completely rewriting the data-validation module.
