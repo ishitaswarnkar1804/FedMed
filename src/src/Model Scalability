@@ -1,7 +1,6 @@
 The FedMed system can also be extended to support different machine learning models.
 
 For example:
-
 FedMed
  │
  ├── Logistic Regression
