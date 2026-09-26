@@ -1,0 +1,43 @@
+Limitations of FedMed
+
+Since FedMed uses Federated Learning for healthcare data, its main limitations come from the challenges of distributed medical datasets, privacy, communication, and model reliability. These are recognized limitations of healthcare FL systems.
+
+1. Non-IID Data Distribution
+
+Different hospitals or healthcare clients may have different patient populations, disease patterns, features, and data sizes. This can make it difficult for the global model to learn a pattern that performs equally well across all clients.
+
+2. Communication Overhead
+
+FedMed requires repeated communication between local clients and the central aggregation server. As the number of clients and training rounds increases, communication can become expensive and time-consuming.
+
+3. Privacy Is Not Completely Guaranteed
+
+Although raw patient data remains at the local institution, model updates themselves can potentially leak information through attacks such as inference or membership-inference attacks. Additional security techniques may therefore be required.
+
+4. Data Quality Differences
+
+Medical institutions may collect data using different equipment, procedures, formats, and standards. Missing values, inconsistent features, and different preprocessing methods can affect the quality of the federated model.
+
+5. Computational Requirements
+
+Each participating client needs sufficient computing resources to train the local model. Smaller hospitals or devices with limited CPU, memory, or network resources may have difficulty participating efficiently.
+
+6. Model Convergence Issues
+
+When local datasets are significantly different, local models can move in different directions. This can slow convergence and reduce the performance of the aggregated global model.
+
+7. Security Threats
+
+A malicious or compromised client could potentially send manipulated model updates. Therefore, FedMed requires mechanisms to detect abnormal or malicious updates.
+
+8. Scalability
+
+As the number of hospitals/clients increases, managing client participation, model aggregation, communication, authentication, and failures becomes more complex. Healthcare FL research identifies scalable and interoperable infrastructure as an ongoing requirement.
+
+9. Limited Explainability
+
+If FedMed uses complex ML/DL models, understanding why the model produced a particular medical prediction can be difficult. Explainability is especially important in healthcare applications.
+
+10. Regulatory and Deployment Challenges
+
+Real-world healthcare deployment requires compliance with applicable privacy, security, data-governance, and clinical requirements. A research prototype such as FedMed may not by itself satisfy all requirements for clinical deployment
