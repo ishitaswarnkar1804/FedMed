@@ -1,0 +1,36 @@
+FedMed is a healthcare system based on Federated Learning, where multiple hospitals or medical institutions can collaboratively train a machine learning model without directly sharing their patient data.
+
+Advantages of FedMed
+Data Privacy
+Patient data remains within the hospital. Only model updates are shared, reducing the need to transfer sensitive medical records.
+Improved Security
+Since raw medical data is not centralized, the risk associated with a single large patient-data repository is reduced.
+Collaborative Learning
+Multiple hospitals can contribute to the development of a common ML model, allowing the model to learn from diverse datasets.
+Better Model Generalization
+Data from different hospitals, locations, and patient populations can help the model perform better across different healthcare environments.
+Reduced Data Transfer
+Instead of transferring large medical datasets, FedMed mainly exchanges model parameters or updates, which can reduce data movement.
+Scalability
+New hospitals or healthcare centers can be added as participating clients without requiring them to transfer their complete datasets to a central server.
+Compliance Support
+Keeping patient data within the original institution can make it easier to follow data-protection and healthcare privacy requirements, although compliance still depends on the complete system design.
+Continuous Improvement
+The global model can be periodically updated using learning from participating hospitals, allowing the system to improve over time.
+Disadvantages of FedMed
+Communication Overhead
+Repeatedly sending model updates between hospitals and the central server can require significant network bandwidth.
+High Computational Requirements
+Each participating hospital needs sufficient computing resources to train the model locally.
+Non-IID Data Problem
+Medical data can differ significantly between hospitals because of different patient populations, equipment, treatments, and data-collection methods. This can affect model performance.
+Unequal Data Quality
+Some hospitals may have incomplete, noisy, or imbalanced datasets, which can affect the quality of the global model.
+System Complexity
+Managing multiple hospitals, local models, model aggregation, authentication, privacy, and communication makes the system more complex than centralized machine learning.
+Security Risks
+Although raw patient data is not shared, model updates themselves can potentially reveal information if proper privacy and security mechanisms are not implemented.
+Slow or Unavailable Clients
+Some hospitals may have slower hardware, poor connectivity, or temporary system failures, which can delay federated training rounds.
+Implementation Cost
+Deploying and maintaining the required infrastructure, security mechanisms, communication systems, and monitoring tools can require significant resources.
