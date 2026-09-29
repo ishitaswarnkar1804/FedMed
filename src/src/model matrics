@@ -1,0 +1,45 @@
+Model Metrics in FedMed
+
+Model Metrics means adding a performance-evaluation module to FedMed that measures how accurately the machine-learning model predicts medical outcomes.
+
+1. Purpose
+
+The Model Metrics module helps determine whether the trained FedMed model is performing properly. Instead of showing only the prediction, the system can provide quantitative measures of model performance.
+
+2. Main Metrics
+Metric	Meaning
+Accuracy	Percentage of total predictions that are correct.
+Precision	How many predicted positive cases are actually positive.
+Recall	How many actual positive cases the model successfully identifies.
+F1-Score	Balance between precision and recall.
+Confusion Matrix	Shows correct and incorrect predictions for each class.
+ROC-AUC	Measures how well the model distinguishes between different classes.
+3. Example
+
+Suppose FedMed predicts whether a patient belongs to a particular medical risk class.
+
+If the test dataset contains 100 patients and the model correctly predicts 92 patients, then:
+
+Accuracy = 92%
+
+But accuracy alone may not be sufficient for medical prediction. For example, if identifying high-risk patients is important, Recall becomes particularly useful because it indicates how many actual high-risk cases were detected.
+
+4. How it works in FedMed
+
+The workflow can be:
+
+Patient Dataset
+      ↓
+Data Preprocessing
+      ↓
+Trained ML Model
+      ↓
+Test Dataset
+      ↓
+Generate Predictions
+      ↓
+Compare Actual vs Predicted
+      ↓
+Calculate Metrics
+      ↓
+Display Results
