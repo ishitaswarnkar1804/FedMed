@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate TenSEAL CKKS keys for FedMed."""
+"""Generate TenSEAL CKKS keys for FedMed"""
 
 from __future__ import annotations
 
