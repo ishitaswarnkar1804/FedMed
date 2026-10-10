@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare hospital silo manifests for MSD Task01."""
 
-from __future__  import annotations
+from __future__ import annotations
 
 import argparse
 import sys
