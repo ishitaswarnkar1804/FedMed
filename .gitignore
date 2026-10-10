@@ -32,3 +32,41 @@ Thumbs.db
 # Secrets
 *.pem
 *.key
+# Data and artifacts
+/data/
+keys/secret/
+/logs/
+/reports/
+/checkpoints/
+venv/
+.venv/
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.so
+
+# Environment and secrets
+.env
+*.pkl
+!keys/.gitkeep
+
+# Node
+dashboard/node_modules/
+dashboard/dist/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.tunnel_url
+
